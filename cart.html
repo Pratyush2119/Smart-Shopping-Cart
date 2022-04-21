@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>My Cart</title>
+        <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <link href="styles.css" rel="stylesheet">
+    </head>
+<body>
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row row-header">
+                <div class="col-4 p-3" align="center">
+                    <a type="button" class="btn btn-outline-primary" href="list.html">Products</a>
+                </div>
+                <div class="col-4 p-3" align="center">
+                    <a type="button" class="btn btn-outline-primary" href="index.html">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container cart-items">
+        <div class="row">
+            <div class="col-12">
+                <table id="cart-table" cell-padding="10px"> 
+                    <thead style="background-color: rgb(56, 163, 245);">
+                        <td align="center" width="50%"><b>Product</b></td>
+                        <td align="center" width="30%"><b>Quantity</b></td>
+                        <td align="center" width="20%"><b>Remove</b></td>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container suggest" id="suggest">
+        <div class="row">
+            <div class="col-12">
+                Suggestions For You!
+            </div>
+            <div class="col-12" id="suggestions"></div>
+        </div>
+    </div>
+
+
+    <div class="buttonManager">
+        <div class="container">
+            <div class="row" align="center">
+                <div class="col-4 p-2">
+                    <button class="btn btn-warning footdata" onclick="openscanner()">Add Product</button>
+                </div>
+                <div class="col-4 p-2">
+                    <button class="btn btn-warning footdata" onclick="addweight()">Add Weight</button>
+                </div>
+                <div class="col-4 p-2">
+                    <button class="btn btn-warning footdata" onclick="remweight()">Rem Weight</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <div class="row" align="center">
+                <div class="col-12 p-2">
+                    <button class="btn btn-primary" onclick="checkout()">CheckOut</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/Javascript">
+        var datarows = '';
+        $.get('data.csv',function(data) {
+            datarows = data.split("\n");
+        });
+        
+        var assocrules = '';
+        $.get('rules_file.csv',function(data) {
+            assocrules = data.split("\n");
+        });
+
+        let weight = 0;
+        let checkweight = 0;
+        let addwgt = 0;
+
+        Dynamsoft.DBR.BarcodeReader.license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxMDA2MTk2LVRYbFhaV0pRY205cSIsIm9yZ2FuaXphdGlvbklEIjoiMTAxMDA2MTk2In0=";
+        let scanner = null;
+        function openscanner() {
+            (async()=>{
+                scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
+                scanner.onUniqueRead = results => {
+                    console.log(results);
+                    for(let i=1;i<datarows.length;i++) {
+                        var columns = datarows[i].split(",");
+                        if (results == columns[0]) {
+                            var data = {"prod":columns[1],"quant":1,"price":columns[3]};
+                            var key = String(Math.floor((Math.random()*100000)+1));
+                            window.localStorage.setItem(key,JSON.stringify(data));
+                            weight = weight + parseFloat(columns[2]);
+                            checkweight = weight;
+
+                            var storage = allStorage();
+                            var values = storage.values;
+                            var keys = storage.keys;
+                            displayCartData(values,keys);
+                            
+                            var suggestions = document.getElementById("suggestions").textContent;
+                            if (suggestions != '') {
+                                if (suggestions.includes(columns[1])) {
+                                    suggestions = suggestions.replace(columns[1],'');
+                                }
+                            }
+                            var prods = findProducts();
+                            var combos = getCombinations(prods);
+
+                            for(let j=0;j<combos.length;j++) {
+                                rule = combos[j].join(" ");
+                                console.log(rule);
+                                for(let k=1;k<assocrules.length;k++) {
+                                    var rules = assocrules[k].split(",");
+                                    if (rules[0] == rule) {
+                                        suggestions = suggestions.concat(" ",rules[1]);
+                                    }
+                                }
+                            }
+                            for(let j=0;j<combos.length;j++) {
+                                rule = combos[j].join(" ");
+                                if(suggestions.includes(rule)) {
+                                    suggestions = suggestions.replace(rule,'');
+                                }
+                            }
+                            document.getElementById("suggestions").innerHTML = suggestions;
+                        }
+                    }
+                };
+                await scanner.show();
+            })();
+        }
+
+        function displayCartData(values,keys) {
+            var carttab = document.getElementById("cart-table").getElementsByTagName("tbody")[0];
+            carttab.innerHTML = '';
+            var html ='<tr>';
+            for (let i=values.length-1;i>=0;i--) {
+                rowdata = JSON.parse(values[i]);
+                html += "<td align='center'>"+rowdata.prod+"</td>";
+                html += "<td align='center'><button class='decquant' onclick='decrease("+keys[i]+")'><b>-</b></button><input id="+keys[i]+" class='quantbox' type='text' value="+rowdata.quant+"><button class='incquant' onclick='increase("+keys[i]+")'><b>+</b></button></td></td>";
+                html += "<td align='center'><button class='remove-btn' onclick='onRemove(this,"+keys[i]+")'>X</button></td></tr>";
+                carttab.innerHTML = html;
+            }
+        }
+
+        function increase(key) {
+            var val = parseInt(document.getElementById(key).value);
+            val = val + 1;
+            document.getElementById(key).value = val;
+            const retrievedString = localStorage.getItem(key);
+            const parsedObject = JSON.parse(retrievedString);
+            parsedObject.quant = val;
+            console.log(parsedObject);
+            const modifiedndstrigifiedForStorage = JSON.stringify(parsedObject);
+            localStorage.setItem(key, modifiedndstrigifiedForStorage);
+        }
+
+        function decrease(key) {
+            var val = document.getElementById(key).value;
+            var fval = 0;
+            if (val != 1) {
+                val = val - 1;
+                fval = val;
+                document.getElementById(key).value = val;
+            }
+            else {
+                document.getElementById(key).value = 1;
+                fval = 1;
+            }
+            const retrievedString = localStorage.getItem(key);
+            const parsedObject = JSON.parse(retrievedString);
+            parsedObject.quant = fval;
+            const modifiedndstrigifiedForStorage = JSON.stringify(parsedObject);
+            localStorage.setItem(key, modifiedndstrigifiedForStorage);
+        }
+
+        function onRemove(o,key) {
+            var p=o.parentNode.parentNode;
+            p.parentNode.removeChild(p);
+            localStorage.removeItem(key);
+        }
+
+        function allStorage() {
+            var values = [],
+            keys = Object.keys(localStorage),
+            i = keys.length;
+            while ( i-- ) {
+                values.push(localStorage.getItem(keys[i]));
+            }
+            keys = keys.reverse();
+            return {values,keys};
+        }
+
+        function findProducts() {
+            var values = [],
+            keys = Object.keys(localStorage),
+            i = keys.length;
+            while(i--) {
+                data = JSON.parse(localStorage.getItem(keys[i]));
+                values.push(data.prod);
+            }
+            return values;
+        }
+
+        window.onload = function() {
+            var storage = allStorage();
+            if (storage.values.length > 0) {
+                displayCartData(storage.values,storage.keys);
+            }
+        }
+
+        function addweight() {
+            addwgt = (Math.random()).toFixed(2);
+            weight = parseFloat(weight) + parseFloat(addwgt);
+        }
+
+        function remweight() {
+            weight = parseFloat(weight) - addwgt;
+        }
+
+        function checkout() {
+            var keys = Object.keys(localStorage),
+            i = keys.length;
+            if (i > 0) {
+                if (parseFloat(weight) == parseFloat(checkweight)) {
+                    location.href = "invoice.html";
+                }
+            }
+        }
+
+        function getCombinations(valuesArray) {
+            var combi = [];
+            var temp = [];
+            var slent = Math.pow(2, valuesArray.length);
+
+            for (var i = 0; i < slent; i++) {
+                temp = [];
+                for (var j = 0; j < valuesArray.length; j++) {
+                    if ((i & Math.pow(2, j))) {
+                        temp.push(valuesArray[j]);
+                    }
+                }
+                if (temp.length > 0) {
+                    combi.push(temp);
+                }
+            }
+
+            combi.sort((a, b) => a.length - b.length);
+            return combi;
+        }
+    </script>
+</body>
+</html>

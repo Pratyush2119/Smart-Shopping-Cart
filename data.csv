@@ -1,0 +1,164 @@
+ID,Products,Weight (in Kg),Price (in Rs),shelf
+QJ8254649E,asparagus,0.35,85,1
+JI4868453W,almonds,0.5,399,2
+IW73297732,antioxydant juice,1,450,3
+XD424040US,avocado,0.5,124,4
+UY49714HWD,babies food,2.5,349,5
+UM80909HDB,bacon,0.15,260,6
+LJ748199Y8,barbecue sauce,0.33,123,7
+XY556019SM,black tea,0.1,189,8
+BS450800BU,blueberries,0.2,449,9
+JB422858JW,body spray,0.2,170,10
+YR746309HI,bramble,0.14,336,11
+JJ119241B8,brownies,0.425,311,12
+OE140862XC,bug spray,0.15,184,13
+VE718901OY,burger sauce,0.25,597,14
+TJ301776R5,burgers,1.2,745,15
+EP77484912,butter,1,378,16
+DF298001UD,cake,0.126,252,17
+PI845295EU,candy bars,0.275,135,18
+HY946693RH,carrots,0.25,99,19
+UC5831483QR,cauliflower,0.25,99,20
+JM2202185W,cereals,0.285,167,21
+TO5844GWT3,champagne,0.75,419,22
+KN558625T2,chicken,1,220,23
+OA759725V5,chili,0.2,60,24
+BB532890WG,chocolate,0.3,880,25
+HE363359AJ,chocolate bread,0.2,70,26
+XR467393R3,chutney,0.2,60,27
+WS3268524T,cider,0.75,449,28
+DG52339525,clothes accessories,0.024,40,29
+RQ5651063G,cookies,0.33,205,30
+EY3756973R,cooking oil,1,165,31
+OX745030GW,corn,0.4,260,32
+ZG8471853T,cottage cheese,1,280,33
+TL694084T2,cream,0.25,63,34
+RE714460L7,dessert wine,0.35,275,35
+PR285827EY,eggplant,1,50,36
+LL804621EY,eggs,0.07,173,37
+EJ858626YW,energy bar,0.24,230,38
+WN91665VT9,energy drink,0.25,110,39
+HP6080112F,escalope,0.4,428,40
+PQ4259702G,extra dark chocolate,0.05,337,41
+HH752223GY,flax seed,0.2,99,42
+JF919641F4,french fries,0.2,289,43
+YG345643FG,french wine,1,380,44
+QF977936VA,fresh bread,0.2,23.75,45
+MW848492QF,fresh tuna,0.185,195,46
+NF668776BT,fromage blanc,1,679,47
+AG980306,frozen smoothie,0.5,687,48
+WB862727R2,frozen vegetables,0.4,225,49
+ML204230FF,gluten free bar,0.18,439,50
+OI764847AA,grated cheese,0.1,399,51
+LL695641AB,green beans,0.5,65,52
+ZL170303D3,green grapes,1,65,53
+XS310231G4,green tea,0.25,315,54
+EK4396724G,ground beef,0.45,238,55
+LA2795353E,gums,0.024,50,56
+YE1008342R,ham,0.34,435,57
+HO515688V4,hand protein bar,0.18,760,58
+SB728425F2,herb & pepper,0.1,245,59
+HU430182F,honey,0.5,150,60
+EC7893618J,hot dogs,0.2,350,61
+VZ474775FW,ketchup,2,200,62
+YD43161QBB,light cream,0.25,149,63
+TG2359375G,light mayo,0.43,586,64
+WK956390SD,low fat yogurt,0.3,395,65
+EC697650NH,magazines,0.15,139,66
+OH931693RF,mashed potato,0.75,229,67
+SJ106509GR,mayonnaise,0.45,134,68
+TM902592RT,meatballs,0.425,460,69
+MH146813OF,melons,1,179,70
+DI997347FB,milk,1,68,71
+QB5895028F,mineral water,12,780,72
+CV559689F2,mint,0.4,199,73
+TK82815134,mint green tea,0.1,481,74
+XB14022FRW,muffins,0.25,150,75
+XV599724R5,mushroom cream sauce,0.25,150,76
+ET804126RR,napkins,0.25,499,77
+HT945174CC,nonfat milk,0.5,110,78
+HK199157DD,oatmeal,1,499,79
+MH94365EE,oil,1,139,80
+GW5737654R,olive oil,1,159,81
+JE349443FH,pancakes,0.25,110,82
+YE5930439G,parmesan cheese,0.35,249,83
+WI960638FW,pasta,0.1,85,84
+MC105503FT,pepper,0.15,65,85
+KA22989882,pet food,0.5,229,86
+CD317703,pickles,0.2,119,87
+TX66455VBR,protein bar,0.3,299,88
+WI742182F5,red wine,1,439,89
+QJ817740GZ,rice,5,305,90
+LK219481QW,salad,0.15,169,91
+IV321727QO,salmon,0.35,350,92
+FA711385UY,salt,0.25,89,93
+TD144370OD,sandwich,0.1,70,94
+GJ2481706D,shallot,0.5,149,95
+RC992759CE,shampoo,1,568,96
+LH139329OC,shrimp,0.25,349,97
+RE7145439H,soda,0.75,20,98
+VJ188998DU,soup,0.14,8,99
+DW703865JD,spaghetti,0.25,135,100
+KI996703LW,sparkling water,0.75,274,101
+CP440938DU,spinach,1,20,102
+BG435366IV,strawberries,0.2,267,103
+PI100671FU,strong cheese,0.5,129,104
+EI3633818E,tea,0.25,200,105
+EF46633230,tomato juice,0.5,83,106
+VJ371417WE,tomato sauce,1,115,107
+HS289564LP,tomatoes,1,12,108
+AN522025LH,toothpaste,0.15,67,109
+HD144470IJ,turkey,1,250,110
+BC883236MH,vegetables mix,0.25,124,111
+NC3121967D,water spray,0.05,49,112
+BW301069TR,white wine,1,549,113
+NT590011YS,whole weat flour,5,220,114
+PY89724BTA,whole wheat pasta,1,133,115
+XR579223ID,whole wheat rice,1,86,116
+EF8343936D,yams,0.5,129,117
+HP891196B7,yogurt cake,0.1,99,118
+RB401571NH,zucchini,0.5,116,119
+UDN882N2,fogg marco,0.2,149,120
+YD72N72JWD,fogg napolean deodrant,0.2,149,121
+BDH73HU376,fogg fresh fougere,0.2,149,122
+H848N738BF,refreshing menthol soap,0.1,69,123
+D9WE2J9EI9,dettol cool soap,0.1,49,124
+9FK28ENWW4,pampers pants,0.5,179,125
+7HD68B837H,littles baby wipes,0.15,78,126
+HF73NF8BOW,huggies wonder pants,0.5,159,127
+UFIS849FNE,nescafe gold blend,0.25,60,128
+8FN6FSNFI3,nescafe gold origins,0.25,65,129
+8FW64BFJWQ,nescafe gold,0.25,58,130
+PGDT83NU92,yogabar super muesli,0.5,129,131
+BCI9Y2DN82,yogabar oats,0.25,99,132
+8FSG6BDIS9,yogabar breakfast muesli,0.5,139,133
+DB628WY93Z,lemor roasted chips,0.2,65,134
+YD36V3VY81,lemor bhajni chakli,0.2,60,135
+62ND728DB3,lemor garlic chiwda,0.2,60,136
+7BGAGDDBQY,lizol disinfectant,0.75,150,137
+9NBYGFHBY7,tide plus,0.45,76,138
+739DB73U3S,surf excel matic,0.5,68,139
+WI892ND8DN,odonil air freshner,0.65,99,140
+63BDGTE72G,ambipur air freshner,0.15,74,141
+JFUWFB8372,godrej aer,0.025,39,142
+DBGF22BEU7,cadbury dairy milk,0.02,20,143
+FU764FFBY2,cadbury gems,0.01,10,144
+846B68B7D2,nestle kitkat,0.015,10,145
+84D7Q0DB73,kinley soda,0.5,60,146
+92DBGD8BDS,jaljeera powder,0.05,50,147
+XRTEI28ND1,tata salt,0.3,66,148
+ZOPI8DN3FB,lemon,0.005,5,149
+APFN39FN3N,corriander leaves,0.01,5,150
+73N82ND922,green chilly,0.01,5,151
+3N8B7BD821,maggi masala noodles,0.5,75,152
+8N83BF8OND,yippie masala noodles,0.5,68,153
+BY981BUE3N,maggi atta noodles,0.5,71,154
+8002N8DB81,godrej hand sanitizer,0.25,89,155
+N0END8DQ23,godrej surface disinfectant,0.75,109,156
+TO830DMC3N,godrej wet wipes,0.15,55,157
+YW84I3U3FU,lays chips,0.02,10,158
+N72B3BFF29,coca cola,0.2,20,159
+739DNUGF3U,kurkure,0.02,10,160
+0HDU3BQBD2,nutella,0.35,56,161
+073DYBD722,peanut butter,0.3,79,162
+NFFHWE8319,bread,0.25,40,163
