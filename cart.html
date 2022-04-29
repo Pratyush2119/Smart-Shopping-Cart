@@ -30,8 +30,9 @@
             <div class="col-12">
                 <table id="cart-table" cell-padding="10px"> 
                     <thead style="background-color: rgb(56, 163, 245);">
-                        <td align="center" width="50%"><b>Product</b></td>
+                        <td align="center" width="30%"><b>Product</b></td>
                         <td align="center" width="30%"><b>Quantity</b></td>
+                        <td align="center" width="30%"><b>Weight (in Kg)</b></td>
                         <td align="center" width="20%"><b>Remove</b></td>
                     </thead>
                     <tbody>
@@ -51,6 +52,17 @@
         </div>
     </div>
 
+    <div class="wgt-counter">
+        <div class="container">
+            <div class="row" align="center">
+                <div class="col-12">
+                    <span>Total Weight: </span>
+                    <span id="totwgt">0</span>
+                    <span> Kg</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="buttonManager">
         <div class="container">
@@ -92,6 +104,7 @@
         let weight = 0;
         let checkweight = 0;
         let addwgt = 0;
+        var suggestions = [];
 
         Dynamsoft.DBR.BarcodeReader.license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxMDA2MTk2LVRYbFhaV0pRY205cSIsIm9yZ2FuaXphdGlvbklEIjoiMTAxMDA2MTk2In0=";
         let scanner = null;
@@ -99,25 +112,25 @@
             (async()=>{
                 scanner = await Dynamsoft.DBR.BarcodeScanner.createInstance();
                 scanner.onUniqueRead = results => {
-                    console.log(results);
                     for(let i=1;i<datarows.length;i++) {
                         var columns = datarows[i].split(",");
                         if (results == columns[0]) {
-                            var data = {"prod":columns[1],"quant":1,"price":columns[3]};
+                            var data = {"prod":columns[1],"quant":1,"wgt":columns[2],"price":columns[3]};
                             var key = String(Math.floor((Math.random()*100000)+1));
                             window.localStorage.setItem(key,JSON.stringify(data));
-                            weight = weight + parseFloat(columns[2]);
-                            checkweight = weight;
 
                             var storage = allStorage();
                             var values = storage.values;
                             var keys = storage.keys;
                             displayCartData(values,keys);
                             
-                            var suggestions = document.getElementById("suggestions").textContent;
-                            if (suggestions != '') {
-                                if (suggestions.includes(columns[1])) {
-                                    suggestions = suggestions.replace(columns[1],'');
+                            if (suggestions.length != 0) {
+                                if(suggestions.includes(String(columns[1]).trim())) {
+                                    for( var j = 0; j < suggestions.length; j++){ 
+                                        if ( suggestions[j] === columns[1]) { 
+                                            suggestions.splice(j, 1); 
+                                        }
+                                    }
                                 }
                             }
                             var prods = findProducts();
@@ -125,21 +138,28 @@
 
                             for(let j=0;j<combos.length;j++) {
                                 rule = combos[j].join(" ");
-                                console.log(rule);
                                 for(let k=1;k<assocrules.length;k++) {
                                     var rules = assocrules[k].split(",");
                                     if (rules[0] == rule) {
-                                        suggestions = suggestions.concat(" ",rules[1]);
+                                        if (suggestions.includes(String(rules[1]).trim())) {
+
+                                        }
+                                        else {
+                                            suggestions.push(String(rules[1]).trim());
+                                        }
                                     }
                                 }
                             }
-                            for(let j=0;j<combos.length;j++) {
-                                rule = combos[j].join(" ");
-                                if(suggestions.includes(rule)) {
-                                    suggestions = suggestions.replace(rule,'');
+                            for(let j=0;j<prods.length;j++) {
+                                if(suggestions.includes(prods[j])) {
+                                    for( var k = 0; k < suggestions.length; k++){ 
+                                        if ( suggestions[k] === prods[j]) { 
+                                            suggestions.splice(k, 1); 
+                                        }
+                                    }
                                 }
                             }
-                            document.getElementById("suggestions").innerHTML = suggestions;
+                            document.getElementById("suggestions").innerHTML = suggestions.toString();
                         }
                     }
                 };
@@ -150,14 +170,20 @@
         function displayCartData(values,keys) {
             var carttab = document.getElementById("cart-table").getElementsByTagName("tbody")[0];
             carttab.innerHTML = '';
+            var totweight = 0;
             var html ='<tr>';
             for (let i=values.length-1;i>=0;i--) {
                 rowdata = JSON.parse(values[i]);
+                totweight = totweight + parseFloat(rowdata.wgt);
                 html += "<td align='center'>"+rowdata.prod+"</td>";
                 html += "<td align='center'><button class='decquant' onclick='decrease("+keys[i]+")'><b>-</b></button><input id="+keys[i]+" class='quantbox' type='text' value="+rowdata.quant+"><button class='incquant' onclick='increase("+keys[i]+")'><b>+</b></button></td></td>";
+                html += "<td align='center' id='wgt"+keys[i]+"'>"+rowdata.wgt+"</td>";
                 html += "<td align='center'><button class='remove-btn' onclick='onRemove(this,"+keys[i]+")'>X</button></td></tr>";
                 carttab.innerHTML = html;
             }
+            weight = totweight;
+            checkweight = totweight;
+            document.getElementById("totwgt").innerHTML = totweight.toFixed(3);
         }
 
         function increase(key) {
@@ -167,9 +193,26 @@
             const retrievedString = localStorage.getItem(key);
             const parsedObject = JSON.parse(retrievedString);
             parsedObject.quant = val;
-            console.log(parsedObject);
+            for (let i=0;i<datarows.length;i++) {
+                var columns = datarows[i].split(",");
+                if(columns[1] == parsedObject.prod) {
+                    parsedObject.wgt = val*parseFloat(columns[2]);
+                    document.getElementById("wgt"+key).innerHTML = parsedObject.wgt;
+                    break;
+                }
+            }
             const modifiedndstrigifiedForStorage = JSON.stringify(parsedObject);
             localStorage.setItem(key, modifiedndstrigifiedForStorage);
+            var storage = allStorage();
+            var values = storage.values;
+            var totweight = 0;
+            for (let i=values.length-1;i>=0;i--) {
+                rowdata = JSON.parse(values[i]);
+                totweight = totweight + parseFloat(rowdata.wgt);
+            }
+            weight = totweight;
+            checkweight = totweight;
+            document.getElementById('totwgt').innerHTML = totweight.toFixed(3);
         }
 
         function decrease(key) {
@@ -187,13 +230,37 @@
             const retrievedString = localStorage.getItem(key);
             const parsedObject = JSON.parse(retrievedString);
             parsedObject.quant = fval;
+            for (let i=0;i<datarows.length;i++) {
+                var columns = datarows[i].split(",");
+                if(columns[1] == parsedObject.prod) {
+                    parsedObject.wgt = val*parseFloat(columns[2]);
+                    document.getElementById("wgt"+key).innerHTML = parsedObject.wgt;
+                    break;
+                }
+            }
             const modifiedndstrigifiedForStorage = JSON.stringify(parsedObject);
             localStorage.setItem(key, modifiedndstrigifiedForStorage);
+            var storage = allStorage();
+            var values = storage.values;
+            var totweight = 0;
+            for (let i=values.length-1;i>=0;i--) {
+                rowdata = JSON.parse(values[i]);
+                totweight = totweight + parseFloat(rowdata.wgt);
+            }
+            weight = totweight;
+            checkweight = totweight;
+            document.getElementById('totwgt').innerHTML = totweight.toFixed(3);
         }
 
         function onRemove(o,key) {
             var p=o.parentNode.parentNode;
             p.parentNode.removeChild(p);
+            var item = JSON.parse(localStorage.getItem(key));
+            var remwgt = parseFloat(item.wgt);
+            var totwgt = parseFloat(document.getElementById('totwgt').textContent);
+            var finalweight = totwgt - remwgt;
+            weight = finalweight;
+            document.getElementById('totwgt').innerHTML = finalweight.toFixed(3);
             localStorage.removeItem(key);
         }
 
@@ -228,11 +295,21 @@
 
         function addweight() {
             addwgt = (Math.random()).toFixed(2);
-            weight = parseFloat(weight) + parseFloat(addwgt);
+            var storage = allStorage();
+            var values = storage.values;
+            var totweight = 0;
+            for (let i=values.length-1;i>=0;i--) {
+                rowdata = JSON.parse(values[i]);
+                totweight = totweight + parseFloat(rowdata.wgt);
+            }
+            totweight = totweight + parseFloat(addwgt);
+            weight = totweight;
+            document.getElementById('totwgt').innerHTML = totweight;
         }
 
         function remweight() {
             weight = parseFloat(weight) - addwgt;
+            document.getElementById('totwgt').innerHTML = weight;
         }
 
         function checkout() {

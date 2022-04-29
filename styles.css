@@ -154,8 +154,17 @@ textarea {
     height: 80px;
 }
 
+.wgt-counter {
+    background-color:rgb(162, 237, 246);
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 105px;
+}
+
 @media all and (max-width:768px) {
-    .item-cat,.cart-items,.footdata,.suggest,.inv-items,.feedbackform {
+    .item-cat,.cart-items,.footdata,.suggest,.inv-items,.feedbackform,.wgt-counter {
         font-size: 14px;
     }
 }
